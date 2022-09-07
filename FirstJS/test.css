@@ -1,0 +1,12 @@
+body{
+    background-color: red,
+}
+ul{
+    background-color: red;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
