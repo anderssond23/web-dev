@@ -21,50 +21,23 @@ function htmlEnd(res) {
     </html>`);
     res.end()
 }
-function restartGame(){
-    //build deck
-    app.get('/'), async (req,res) => {
+app.get('/', async (req,res) => {
     try{
         htmlStart(res);
-        let fRes = await fetch('http://localhost:3001/deck');
-        let deck = await fRes.json(); 
+        
+        let fRes = await fetch('http://localhost:3001/pHand');
+        let pHand = await fRes.json(); 
+        res.write(`<h1>Player hand:</h1>`)
+        for (let game of pHand) {
+            res.write(`<p1>${game.playerHand}:</p1>`)
+        }
         htmlEnd(res);
-        console.log(`${deck}`);
-    }
+        }
+    
     catch(err){
-        res.write(`<h1>bad: ${err.message}</h1>`);
+        res.write(`<p1>bad: ${err.message}</p1>`)
         htmlStart(res);
     }
-    //shuffle deck
-    function shuffle(deck){
-        for (var i = deck.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-        }
-    }
-    //deal cards
-    try{
-    htmlStart(res);
-    let playerHand = deck;
-    playerHand.splice (2, 50);
-    deck.splice (0, 2);
-    res.write(`Your Hand: ${playerHand}`);
-    let dealerHand = deck;
-    dealerHand.splice (2, 50)
-    deck.splice (0, 2);
-    res.write(`Dealer hand: ${dealerHand}`);
-}
-
-catch(err){
-        res.write(`<h1>bad: ${err.message}</h1>`);
-        htmlStart(res);
-        }
-    }
-}
-app.post("hit", (req,res) => {
-    res.json("hit");
 })
 
 app.listen(port, () => {

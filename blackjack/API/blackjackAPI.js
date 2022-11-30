@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
 const port = 3001;
-
-let cards = [
+let deck = [];
+function buildDeck(){
+deck = [
     {id: 1, suite: "Hearts", rank: "Ace", value: 11},
     {id: 2, suite: "Hearts", rank: "Two", value: 2},
     {id: 3, suite: "Hearts", rank: "Three", value: 3},
@@ -56,21 +57,99 @@ let cards = [
     {id: 51, suite: "Spades", rank: "Queen", value: 10},
     {id: 52, suite: "Spades", rank: "King", value: 10},
 ];
-let playerHand = [
-    {}
-];
-let dealerHand = [
-    {}
-];
-let discard = [
-    {}
-];
+}
+let game = {
+    playerHand: [],
+    dealerHand: []
+}
+function shuffle(deck) {
+    let currentIndex = deck.length,  randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [deck[currentIndex], deck[randomIndex]] = [
+        deck[randomIndex], deck[currentIndex]];
+    }
+    return deck;
+}
+function handValue(hand){
+    for(let card of hand){
+        card.value.reduce((a, b) => a + b, 0)
+    }
+}
+function findWinner() {
+    if (handValue.game.playerHand > 21){
+        console.log('Player Busts');
+    }
+    if (handValue.game.dealerHand > 21){
+        console.log('Dealer Busts');
+    }
+    if (22 > handValue.game.playerHand > handValue.game.dealerHand){
+        console.log('Player Wins!');
+    }
+    if (22 > handValue.game.dealerHand > handValue.game.playerHand){
+        console.log('Dealer Wins!');
+    }
+}
+function dealPlayerCard() {
+    let card = deck.pop();
+    game.playerHand.push(card);
+}
+function dealDealerCard() {
+    let card = deck.pop();
+    game.dealerHand.push(card);
+}
+function dealerPlays() {
+    if(game.dealerHand.value < 17){
+        dealDealerCard();
+    }
+    else() => {
+        findWinner
+    }
+}
+function restartGame() {
+    //build deck
+    buildDeck();
+    //shuffle deck
+    shuffle(deck);
+    //deal cards
+    console.log('Player Hand:')
+    dealPlayerCard();
+    dealPlayerCard();
+    console.log(game.playerHand);
+    console.log('Dealer Hand');
+    dealDealerCard();
+    dealDealerCard();
+    console.log(game.dealerHand);
+}
+restartGame();
+
+app.post("hit", (req, res) => {
+    dealPlayerCard();
+    console.log('Player Hand:')
+    console.log(game.playerHand)
+    res.json(game);
+})
+
+app.post("stand", (req, res) => {
+    dealerPlays;
+    res.json(game);
+})
 
 app.get('/deck',( req, res) =>{
-    res.json(cards);
-    res.json(playerHand);
-    res.json(dealerHand);
-    res.json(discard);
+    res.json(deck);
+})
+app.get('/pHand', (req, res) =>{
+    res.json(game.playerHand);
+})
+app.get('/dHand', (req, res) =>{
+    res.json(game.dealerHand);
 })
 
 app.listen(port, () => {
