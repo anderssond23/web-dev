@@ -1,0 +1,40 @@
+html{
+    background-color: green;
+}
+div{
+    display: flex;
+    justify-content: center;
+}
+
+div2{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+div3{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+div4{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 35vh;
+}
+div5{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height:35vh
+}
+img{
+    width:fit-content;
+    height:fit-content;
+    max-height:70%;
+}
+body{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+}

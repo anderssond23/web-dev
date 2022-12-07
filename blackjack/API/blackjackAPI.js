@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const port = 3001;
 let deck = [];
+app.use(express.static('public'));
 function buildDeck(){
 deck = [
     {id: 1, suite: "Hearts", rank: "Ace", value: 11},
@@ -15,7 +16,7 @@ deck = [
     {id: 9, suite: "Hearts", rank: "Nine", value: 9},
     {id: 10, suite: "Hearts", rank: "Ten", value: 10},
     {id: 11, suite: "Hearts", rank: "Jack", value: 10},
-    {id: 12, suite: "Hearts", rank: "Queen", Value: 10},
+    {id: 12, suite: "Hearts", rank: "Queen", value: 10},
     {id: 13, suite: "Hearts", rank: "King", value: 10},
     {id: 14, suite: "Clubs", rank: "Ace", value: 11},
     {id: 15, suite: "Clubs", rank: "Two", value: 2},
@@ -79,24 +80,27 @@ function shuffle(deck) {
     return deck;
 }
 function handValue(hand){
-    for(let card of hand){
-        card.value.reduce((a, b) => a + b, 0)
-    }
+    let handValue = 0;
+    for(card of hand){
+        handValue = handValue + card.value
+        console.log(handValue)
+    };
+    return(handValue);
 }
 function findWinner() {
-    if (handValue.game.playerHand > 21){
-        console.log('Player Busts');
-    }
-    if (handValue.game.dealerHand > 21){
-        console.log('Dealer Busts');
-    }
-    if (22 > handValue.game.playerHand > handValue.game.dealerHand){
-        console.log('Player Wins!');
-    }
-    if (22 > handValue.game.dealerHand > handValue.game.playerHand){
-        console.log('Dealer Wins!');
-    }
+    if (handValue(game.playerHand) > handValue(game.dealerHand) && handValue(game.playerHand) < 22){
+        console.log('Player Wins!')
 }
+    else if (handValue(game.playerHand) == handValue(game.dealerHand)) {
+        console.log('Same Value, Tied Game!')
+    }
+    else if (handValue(game.playerHand) && handValue(game.dealerHand) >21) {
+        console.log('All Bust!')
+    }
+    else if(handValue(game.playerHand) < handValue(game.dealerHand) && handValue(game.dealerHand)< 22) {
+        console.log('dealer wins!')
+    }
+};
 function dealPlayerCard() {
     let card = deck.pop();
     game.playerHand.push(card);
@@ -106,12 +110,12 @@ function dealDealerCard() {
     game.dealerHand.push(card);
 }
 function dealerPlays() {
-    if(game.dealerHand.value < 17){
+    while(handValue(game.dealerHand) < 17){
         dealDealerCard();
-    }
-    else() => {
-        findWinner
-    }
+    }       
+    console.log('Dealer Hand: ');
+    console.log(game.dealerHand);
+    findWinner()
 }
 function restartGame() {
     //build deck
@@ -123,22 +127,24 @@ function restartGame() {
     dealPlayerCard();
     dealPlayerCard();
     console.log(game.playerHand);
+    handValue(game.playerHand);
     console.log('Dealer Hand');
     dealDealerCard();
     dealDealerCard();
     console.log(game.dealerHand);
+    handValue(game.dealerHand);
 }
 restartGame();
 
-app.post("hit", (req, res) => {
+app.post("/hit", (req, res) => {
     dealPlayerCard();
     console.log('Player Hand:')
     console.log(game.playerHand)
     res.json(game);
 })
 
-app.post("stand", (req, res) => {
-    dealerPlays;
+app.post("/stand", (req, res) => {
+    dealerPlays();
     res.json(game);
 })
 

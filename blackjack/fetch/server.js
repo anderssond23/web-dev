@@ -21,24 +21,6 @@ function htmlEnd(res) {
     </html>`);
     res.end()
 }
-app.get('/', async (req,res) => {
-    try{
-        htmlStart(res);
-        
-        let fRes = await fetch('http://localhost:3001/pHand');
-        let pHand = await fRes.json(); 
-        res.write(`<h1>Player hand:</h1>`)
-        for (let game of pHand) {
-            res.write(`<p1>${game.playerHand}:</p1>`)
-        }
-        htmlEnd(res);
-        }
-    
-    catch(err){
-        res.write(`<p1>bad: ${err.message}</p1>`)
-        htmlStart(res);
-    }
-})
 
 app.listen(port, () => {
     console.log(`server: ${port}`)
